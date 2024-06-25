@@ -15,9 +15,6 @@ EMAIL = os.getenv("ZENDESK_EMAIL")
 API_TOKEN = os.getenv("ZENDESK_API_TOKEN")
 BASE_URL = f"https://{SUBDOMAIN}.zendesk.com/api/v2"
 AUTH = (f"{EMAIL}/token", API_TOKEN)
-MAX_UPDATED_AT = datetime.now(pytz.utc) - timedelta(
-    days=os.getenv("MAX_UPDATED_AT", 365 * 3)
-)
 DOWNLOAD_DIR = os.getenv("DOWNLOAD_DIR", "./data")
 RESTING_TIME = os.getenv("RESTING_TIME", 60)
 DEBUG = os.getenv("DEBUG", False)
@@ -96,8 +93,11 @@ class Ticket:
 
 
 def run():
+    max_updated_at = datetime.now(pytz.utc) - timedelta(
+        days=int(os.getenv("MAX_UPDATED_AT", 365 * 3))
+    )
     params = {
-        "query": f'type:ticket status:closed updated<{MAX_UPDATED_AT.strftime("%Y-%m-%d")}',
+        "query": f'type:ticket status:closed updated<{max_updated_at.strftime("%Y-%m-%d")}',
         "sort_by": "updated_at",
         "sort_order": "asc",
     }
@@ -107,7 +107,7 @@ def run():
         ticket_date = result["updated_at"] = datetime.strptime(
             result["updated_at"], "%Y-%m-%dT%H:%M:%S%z"
         )
-        if ticket_date < MAX_UPDATED_AT:
+        if ticket_date < max_updated_at:
             ticket = Ticket(result, DOWNLOAD_DIR)
             ticket.save()
             ticket.delete()
