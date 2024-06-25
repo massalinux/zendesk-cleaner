@@ -110,7 +110,7 @@ def run():
         if ticket_date < MAX_UPDATED_AT:
             ticket = Ticket(result, DOWNLOAD_DIR)
             ticket.save()
-            # ticket.delete()
+            ticket.delete()
             log(f"Ticket {ticket.id} archived")
 
 
