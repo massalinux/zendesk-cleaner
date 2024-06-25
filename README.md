@@ -14,6 +14,27 @@ Use this to free space from your Zendesk account and keep a local copy of the ti
 - start the script and leave it running  `python main.py`
 
 
+
+## What you will get
+The script create a folder for each ticket with a json of the whole conversation and will download each attachment and zip it, finally will delete the ticket from your zendesk account.
+
+```bash
+data/
+├── 13668
+│   ├── 13668-ticket.json
+│   └── ?name=camici.docx.zip
+├── 13669
+│   └── 13669-ticket.json
+├── 13671
+│   └── 13671-ticket.json
+├── 13672
+│   ├── 13672-ticket.json
+│   ├── ?name=S16102611210.pdf.zip
+│   └── ?name=S16102611220.pdf.zip
+├── 13673
+│   └── 13673-ticket.json
+```
+
 ### [Optional] Do you use PM2? 
 
 If you use pm2 in your server here the ecosystem.config.json
@@ -40,7 +61,6 @@ If you use pm2 in your server here the ecosystem.config.json
 then
 
 `pm2 start ecosystem.config.js`
-
 
 
 
